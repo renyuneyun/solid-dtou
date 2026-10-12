@@ -6,7 +6,7 @@ Here is the same example prohibition that prohibits the use of the data for comm
 ex:prohibition1 a dtou:Prohibition ;
   dtou:activation_condition ex:activationCondition1 ;
   dtou:mode dtou:Use ;
-  dtou:binding ex:attribute-dob .
+  dtou:validity_binding ex:attribute-dob .
 
 ex:activationCondition1 a dtou:ActivationCondition ;
   dtou:purpose voc:commercial;

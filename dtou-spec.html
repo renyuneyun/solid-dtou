@@ -45,6 +45,8 @@ It accompanies the paper "Perennial Semantic Data Terms of Use for Decentralized
 
 This is a design document and is not a W3C Technical Report. It is a work in progress and may be updated, replaced, or rendered obsolete by other documents at any time. Please cite the paper mentioned in the abstract if you refer to this work.
 
+This document is the source record of the DToU language specification in its **camera-ready form** (as accepted at WWW 2024 and described in the accompanying paper), using the tag classes `dtou:Security`, `dtou:Integrity`, and `dtou:Purpose` organised under an explicit two-kind hierarchy — a common `dtou:Tag` parent with `dtou:Requirement` (holding `dtou:Security`) and `dtou:Tagging` (holding `dtou:Integrity` and `dtou:Purpose`), as in the paper's Figure 1. In this form the app-side descriptors are **bare** vocabulary terms. This document is a frozen snapshot of that camera-ready form; the current, living specification is published in the [DToU language repo](https://github.com/renyuneyun/dtou-lang).
+
 </section>
 
 <section class="informative">
@@ -54,7 +56,7 @@ This is a design document and is not a W3C Technical Report. It is a work in pro
 As the name implies, the perennial DToU language is a language for describing the Terms of Use of Data. It is designed to be used in a decentralized environment, especially decentralized Web, where data is shared between different parties, and where the terms of use of the data need to be clearly defined.
 It is called *perennial* because it is designed to be long-lasting such that the expressed policies do not normally need to be recreated, and to produce derived policies, much like plants that will grow for multiple years in different environments and produce descendants.
 
-There are different rationales and/or usage scenarios, that are described in the correcponding later section of this document. The language is designed to be flexible and extensible, so that it can be used in different contexts and for different purposes.
+There are different rationales and/or usage scenarios, that are described in the corresponding later section of this document. The language is designed to be flexible and extensible, so that it can be used in different contexts and for different purposes.
 
 <figure id="lang-structure">
   <img src="./res/language-structure.png" width="100%">
@@ -103,7 +105,7 @@ The following sections explain them in more details.
 
 ### Attribute
 
-An attribute is a tuple of a name, a type and a value.
+An attribute is a tuple of a name, a class and a value.
 
 <aside class="example" data-include="sec/dp/ex-attr1.md" data-include-format="markdown"></aside>
 
@@ -113,12 +115,12 @@ An attribute is a tuple of a name, a type and a value.
 
 Tags represent special information/labels that comes with the data (policy). They are classified as two main *categories*, each with their own semantics:
 
-1. Requirement: The information/labels that the data (policy) demans, such that the data consumer (app) must satisfy.
+1. Requirement: The information/labels that the data (policy) demands, such that the data consumer (app) must satisfy.
 2. Tagging: The information/labels that the data (policy) contains/provides, such that the data consumer (app) may request.
 
 They can have their subclasses, with their own meanings. The meanings are informative, while the reasoning follows the same rule.
 
-To pass the compliance checking, the data's corresponding *requirement* must present in the app's policy (as *provide*), while the app must not *expect* a *tagging* that does not exist in the data policy. The tag category (of the class tree) must also match.
+To pass the compliance checking, the data's corresponding *requirement* must be present in the app's policy (as *provide*), while the app must not *expect* a *tagging* that does not exist in the data policy. The tag category (of the class tree) must also match.
 
 Equivalently, the *requirement* must be a subset of the *provide* in (the corresponding part in) the app policy, and the *tagging* must be a superset of the *expect* in (the corresponding part in) the app policy.
 
@@ -148,6 +150,12 @@ The common categories represent the following intuition for their meaning:
 
 </section>
 
+<aside class="note">
+
+Terminology note: the paper's Figure 1 names the tag classes `dtou:Security`, `dtou:Integrity`, and `dtou:Purpose`, organised under a common `dtou:Tag` parent with two kinds — `dtou:Requirement` (holding `Security`) and `dtou:Tagging` (holding `Integrity` and `Purpose`). The paper's inline examples (Appendix B) instead spell the same classes `dtou:SecurityTag`, `dtou:IntegrityTag`, and `dtou:PurposeTag`. These are the same classes, spelled two ways; this specification (and the reasoner) follows Figure 1.
+
+</aside>
+
 ### Prohibition
 
 A prohibition (statement) is a restriction on the data usage, as defined by the data provider. The reasoner will verify if the data consumer's policy (app policy) violates the prohibition.
@@ -162,10 +170,16 @@ A prohibition is triggered by an *activation condition*, is for a specific *use 
 
 An obligation (statement) specifies additional actions that the data consumer should perform, under certain conditions. The reasoner will trigger related obligations based on the situation as reflected from the data consumer's policy (app policy).
 
-An obligation (statement) has an *obligation definition*, is triggred at a specific *activation condition*, and may have *bindings* to attributes.
+An obligation (statement) has an *obligation definition*, is triggered at a specific *activation condition*, and may have *bindings* to attributes.
 An *obligation definition* specifies the actual action that the data consumer should perform (when the obligation gets triggered). It has an *action class*, and may have *arguments*, which are in turn references to *attributes*.
 
 <aside class="example" data-include="sec/dp/ex-obligation.md" data-include-format="markdown"></aside>
+
+<aside class="note">
+
+Terminology note: the paper's examples (Section 3.1.1 and Appendix B) write an obligation's argument list with the predicate `:args` (e.g. `:args (:attr1)`), whereas this specification and the reasoner use `dtou:argument`. The two names are equivalent, and the reasoner accepts both. The paper's formal axioms (Appendix C) name this relation `hasArgument`, which corresponds to `:argument`; only the paper's inline Turtle examples use `:args`.
+
+</aside>
 
 </section>
 
@@ -206,7 +220,7 @@ The app policy contains three main blocks:
 2. Input specification: describing the terms of use of the input data, and which input data it takes.
 3. Output specification: describing how the app transforms input to output, reflected in the policy.
 
-The output speficiation is mainly consulted for policy derivation, while the rest are mainly for other tasks of policy reasoning (compliance check and obligation check).
+The output specification is mainly consulted for policy derivation, while the rest are mainly for other tasks of policy reasoning (compliance check and obligation check).
 
 
 <aside class="note">
@@ -224,6 +238,7 @@ In the future, maybe consistency checks will be implemented to verify the explic
 The app information are directly expressed through predicates and objects of the `dtou:AppPolicy` entity. It contains the following information:
 
 - `dtou:name`: The name of the application.
+- `dtou:action`: The action that the app performs, a `dtou:Action` from the shared vocabulary (e.g. booking an appointment).
 
 ### Input specification
 
@@ -233,12 +248,12 @@ It has the following contents:
 
 - `dtou:data`: The URI of the data that the app takes as input.
 - `dtou:port`: The information of the port, especially the name of the port, used to identify.
-- `dtou:provide`: The tags that the app *provides* to use the data.
-- `dtou:expect`: The tags that the app *expects* from the data.
-- `dtou:purpose`: The purposes that the app uses the data for, specially separated from `dtou:expect`.
+- `dtou:security`: The security tags (requirements) that the app *provides* to use the data.
+- `dtou:integrity`: The integrity tags (taggings) that the app *expects* from the data.
+- `dtou:purpose`: The purposes that the app uses the data for.
 - `dtou:downstream`: The downstream that the app will share the data with.
 
-As special cases, `dtou:security` and `dtou:integrity` can be used to specify the corresponding *security* and *integrity* tags, which are to be interpreted as if providing the corresponding `dtou:provide` and `dtou:expect`.
+The objects of `dtou:security`, `dtou:integrity`, and `dtou:purpose` are tags (or purposes) from the shared vocabulary. In this form each descriptor is a **bare** vocabulary term; an already-typed node is not accepted.
 
 <aside class="example" data-include="sec/ap/ex-input.md" data-include-format="markdown"></aside>
 
@@ -250,7 +265,7 @@ To identify a port, we use the unique `dtou:name` of it, represented as a string
 
 #### Tag
 
-The app policy specifies the tags that the app provides and expects from the input data. They are used in conjunction with the tags in the data policy to check the compliance of the app policy. Corresponding to tags in data policy, the tags are of two main categories (requirement and tagging), and can use their subclasses. Different from tag in data policy, the tags in app policy are used to specify the app's promise/provide (corresponding to *requirement*) and expectations (corresponding to *tagging*) on the data.
+The app policy specifies the *security* (`dtou:security`) and *integrity* (`dtou:integrity`) tags that the app provides and expects from the input data, respectively. They are used in conjunction with the tags in the data policy to check the compliance of the app policy. Corresponding to tags in data policy, the tags are of two main categories (requirement and tagging), and can use their subclasses. Different from tag in data policy, the tags in app policy are used to specify the app's promise/provide (corresponding to *requirement*, via `dtou:security`) and expectations (corresponding to *tagging*, via `dtou:integrity`) on the data.
 
 #### Downstream
 
@@ -259,7 +274,7 @@ The downstream (`dtou:DownstreamSpec`) specifies what external bodies with which
 - `dtou:app_name`: The name of the downstream, usually an application.
 - `dtou:purpose`: The purpose that the downstream will use this data for.
 
-The downstream is expected to have the same *provide* and *expect* tags as the current application. The application developer is responsible to guarantee they are correctly listed in the input specification.
+The downstream is expected to have the same *security* and *integrity* tags as the current application. The application developer is responsible to guarantee they are correctly listed in the input specification.
 
 ### Output specification {#app-policy__output-spec}
 
@@ -273,7 +288,7 @@ It specifies the following information:
 
 An output can be derived from multiple inputs, and have multiple refinements. The refinement describes how the information is transformed from input to output, reflected as the transformation of attributes.
 
-The output policy is formed by first copying and marging from the input policies (of all `dtou:from` ports), and then applying the refinements.
+The output policy is formed by first copying and merging from the input policies (of all `dtou:from` ports), and then applying the refinements.
 
 <aside class="example" data-include="sec/ap/ex-output.md" data-include-format="markdown"></aside>
 
@@ -284,7 +299,7 @@ Refinements have two types, representing different semantics:
 - `dtou:Delete`: The matching attribute is deleted (when producing this output).
 - `dtou:Edit`: The matching attribute is modified (when producing this output).
 
-Each refinement also contains a filter (`dout:Filter`) to match the attributes to be refined. 
+Each refinement also contains a filter (`dtou:Filter`) to match the attributes to be refined. 
 
 <aside class="warning">
 
@@ -322,6 +337,7 @@ Similar to data policy set, app policy segments needs to be bundled together to 
 Apart from the data policy and app policy, there are other contextual information that are used during DToU reasoning. They are dynamic information that are not known at the time of policy creation, but are necessary for the reasoning process.
 
 - `dtou:user`: The user that is using the app.
+- `dtou:app`: The app whose policy is being evaluated, as a `dtou:AppInfo` that points to the app policy through `dtou:policy`.
 - `dtou:time`: The time when the reasoning is performed.
 
 They are dynamically created by the policy engine, and are combined with the app policy for reasoning.
@@ -342,7 +358,7 @@ To perform reasoning, the reasoner will first need to identify the correspondanc
 
 <aside class="note">
 
-Our example reasoner is available at [this repository](https://github.com/renyuneyun/dtou-lang), implemented using [[Notation3]]and [[RDF Surfaces]].
+Our example reasoner is available at [this repository](https://github.com/renyuneyun/dtou-lang), implemented using [[Notation3]] and [[RDF Surfaces]].
 
 </aside>
 
@@ -389,7 +405,7 @@ The interaction is performed through an additional API endpoint `/dtou`, followi
   <figcaption>Sequence diagram for custom DToU protocol.</figcaption>
 </figure>
 
-In the implementation, the data policy is stored in the same-named resource file with an additiona `.dtou` suffix. App policy is sent to the server from the App dynamically during policy registration. Usage context is generated automatically by the server, by identifying information from the request (user's WebID) and system (time).
+In the implementation, the data policy is stored in the same-named resource file with an additional `.dtou` suffix. App policy is sent to the server from the App dynamically during policy registration. Usage context is generated automatically by the server, by identifying information from the request (user's WebID) and system (time).
 
 </section>
 

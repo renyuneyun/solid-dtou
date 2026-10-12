@@ -3,7 +3,7 @@ This example shows the same tag `voc:banking`, with a validity binding to an att
 <!-- If deleting this comment, the code formatting will be errornous. -->
 
 ```turtle
-ex:tag2 a dtou:SecurityTag;
+ex:tag2 a dtou:Security;
     dtou:attribute_ref ex:attr-tag2;
     dtou:validity_binding ex:attr2.
 

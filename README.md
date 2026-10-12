@@ -20,7 +20,7 @@ If you want to understand what is DToU, and how it differs from other approaches
   
 - [Demo apps for DToU + Solid](https://github.com/renyuneyun/dtou-demo-sosy): Demo apps for [SoSy2026](https://sosy26.eu) Authz Session
 	- You need a compatible Solid service -- see below
-- [DToU Spec](./dtou-spec.html): specification of the DToU policy language
+- [DToU Spec](./dtou-spec.html): the DToU language specification in its **camera-ready form** as accepted at WWW 2024 (a frozen snapshot for historical reference). The current, living specification and its version history are published from the [DToU language repo](https://github.com/renyuneyun/dtou-lang).
 - Paper: [DOI 10.1145/3589334.3645631](https://doi.org/10.1145/3589334.3645631)
   - arxiv: [2403.07587](https://arxiv.org/abs/2403.07587)
 

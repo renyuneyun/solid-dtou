@@ -4,7 +4,7 @@
 
 ```turtle
 ex:output1 a dtou:OutputSpec;
-	dout:port [
+	dtou:port [
         a dtou:Port;
         dtou:name "output"
     ];
@@ -12,7 +12,7 @@ ex:output1 a dtou:OutputSpec;
         a dtou:Port;
         dtou:name "address-in"
     ], [
-        a dtou:Port
+        a dtou:Port;
         dtou:name "payment-info-in"
     ];
 	dtou:refinement ex:refine-no-payment-details.

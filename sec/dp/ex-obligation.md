@@ -13,6 +13,6 @@ ex:obligation1 a dtou:Obligation ;
 
 ex:attribute-alice-acknowledgement-phrase a dtou:Attribute ;
   dtou:name voc:acknowledgement-phrase ;
-  dtou:type xsd:string ;
+  dtou:class xsd:string ;
   dtou:value "We acknowledge Alice for providing the data which contributed to the research." .
 ```
